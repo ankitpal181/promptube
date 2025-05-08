@@ -8,7 +8,7 @@ from llm_service import generate_queries_service
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://www.youtube.com"],  # or ["*"] for dev
+    allow_origins=["https://www.youtube.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
