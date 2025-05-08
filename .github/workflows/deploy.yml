@@ -13,11 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create build directory
-        run: mkdir build
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
 
       - name: Install dependencies to build
-        run: pip install -r requirements.txt -t build/
+        run: |
+          mkdir -p build
+          pip install --platform manylinux2014_x86_64 --target build --upgrade --implementation cp --python-version 3.10 --only-binary=:all: pydantic
+          pip install -r requirements.txt -t build
 
       - name: Copy python files to build
         run: cp app.py constants.py llm_service.py build/
@@ -26,7 +31,6 @@ jobs:
         run: |
           cd build
           zip -r ../function.zip .
-          cd ../
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -40,9 +44,3 @@ jobs:
           aws lambda update-function-code \
             --function-name promptube_backend \
             --zip-file fileb://function.zip
-
-      - name: Remove build director
-        run: rm -r build
-
-      - name: Remove Lambda zip file
-        run: rm function.zip
