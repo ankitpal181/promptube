@@ -21,8 +21,14 @@ jobs:
       - name: Install dependencies to build
         run: |
           mkdir -p build
-          pip install --platform manylinux2014_x86_64 --target build --upgrade --implementation cp --python-version 3.10 --only-binary=:all: pydantic
-          pip install -r requirements.txt -t build
+          pip install --upgrade pip
+          pip install \
+            --platform manylinux2014_x86_64 \
+            --only-binary=:all: \
+            --implementation cp \
+            --python-version 3.10 \
+            --target build \
+            -r requirements.txt
 
       - name: Copy python files to build
         run: cp app.py constants.py llm_service.py build/
