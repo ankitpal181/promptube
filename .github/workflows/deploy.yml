@@ -1,0 +1,45 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Install dependencies to build
+        run: pip install -r requirements.txt -t build/
+
+      - name: Copy python files to build
+        run: cp app.py constants.py llm_service.py build/
+
+      - name: Zip Lambda function
+        run: zip -r function.zip build/.
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name promptube_backend \
+            --zip-file fileb://function.zip
+
+      - name: Remove build director
+        run: rm -r build
+
+      - name: Remove Lambda zip file
+        run: rm function.zip
