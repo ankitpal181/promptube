@@ -32,8 +32,9 @@ jobs:
 
       - name: Copy python files to build
         run: |
-          cp app.py constants.py data.json build/
+          cp app.py constants.py build/
           cp -r services/ build/
+          cp -r tmp/ build/
 
       - name: Zip Lambda function
         run: |
