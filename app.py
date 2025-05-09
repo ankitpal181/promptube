@@ -1,4 +1,4 @@
-import re
+import re, json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -35,3 +35,10 @@ async def generate_queries(request: Request):
 
 # This is the Lambda handler
 handler = Mangum(app)
+
+# Temp directory setup for writable files
+with open("data.json", "r+") as file:
+    data = json.load(file)
+
+with open("/tmp/data.json", "w+") as file:
+    json.dump(data, file)
