@@ -31,7 +31,9 @@ jobs:
             -r requirements.txt
 
       - name: Copy python files to build
-        run: cp app.py constants.py data.json services/llm_service.py services/auth_service.py services/subscription_service.py build/
+        run: |
+          cp app.py constants.py data.json build/
+          cp -r services/ build/
 
       - name: Zip Lambda function
         run: |
