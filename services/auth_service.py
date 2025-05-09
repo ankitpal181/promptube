@@ -3,7 +3,7 @@ from services.subscription_service import SubscriptionService
 
 class AuthService:
     def __init__(self) -> None:
-        with open("/tmp/data.json", "r+") as file:
+        with open("/tmp/data.json", "r") as file:
             self.users = json.load(file)
 
     def is_user_authenticated(self, email: str) -> bool:

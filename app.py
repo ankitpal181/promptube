@@ -37,8 +37,8 @@ async def generate_queries(request: Request):
 handler = Mangum(app)
 
 # Temp directory setup for writable files
-with open("data.json", "r+") as file:
+with open("data.json", "r") as file:
     data = json.load(file)
 
-with open("/tmp/data.json", "w+") as file:
+with open("/tmp/data.json", "w") as file:
     json.dump(data, file)

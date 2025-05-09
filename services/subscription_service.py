@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class SubscriptionService:
     def __init__(self):
-        with open("/tmp/data.json", "r+") as file:
+        with open("/tmp/data.json", "r") as file:
             self.subscriptions = json.load(file)
 
     def is_user_subscribed(self, email: str) -> bool:
@@ -20,7 +20,7 @@ class SubscriptionService:
             self.subscriptions[email]["subscribed"] = False
             subscription_exhausted = True
 
-            with open("/tmp/data.json", "w+") as file:
+            with open("/tmp/data.json", "w") as file:
                 json.dump(self.subscriptions, file)
         
         return subscription_exhausted
